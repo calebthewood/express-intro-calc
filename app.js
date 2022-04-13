@@ -5,7 +5,7 @@ const app = express();
 
 // useful error class to throw
 const { NotFoundError } = require("./expressError");
-const { findMean } = require("./stats");
+const { findMean, findMode, findMedian } = require("./stats");
 
 const MISSING = "Expected key `nums` with comma-separated list of numbers.";
 
@@ -25,7 +25,7 @@ app.get("/", function (req, res) {
 app.get("/mean", (req, res) => {
 
   const numsString = req.query.nums;
-  const nums = numsString.split(",");
+  const nums = numsString.split(",").map(num => Number(num));
   const mean = findMean(nums);
 
   return res.send(`
@@ -34,14 +34,30 @@ app.get("/mean", (req, res) => {
 });
 
 
-
-
-
 /** Finds median of nums in qs: returns {operation: "median", result } */
+app.get("/median", function (req, res) {
+
+  const numsString = req.query.nums;
+  const nums = numsString.split(",").map(num => Number(num));
+  const median = findMedian(nums);
+
+  return res.send(`
+  <h1>Median</h1>
+  <h2>Your query string's median is ${median}</h2>`);
+});
 
 
 /** Finds mode of nums in qs: returns {operation: "mean", result } */
+app.get("/mode", function (req, res) {
 
+  const numsString = req.query.nums;
+  const nums = numsString.split(",").map(num => Number(num));
+  const mode = findMode(nums);
+
+  return res.send(`
+  <h1>Mode</h1>
+  <h2>Your query string's mode is ${mode}</h2>`);
+});
 
 /** 404 handler: matches unmatched routes; raises NotFoundError. */
 app.use(function (req, res, next) {
