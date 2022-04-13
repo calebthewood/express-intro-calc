@@ -31,7 +31,7 @@ function findMode(nums) {
 function findMean(nums) {
   if (nums.length === 0) return 0;
   return nums.reduce(function (acc, cur) {
-    return acc + cur;
+    return Number(acc) + Number(cur);
   }) / nums.length
 }
 
